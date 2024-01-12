@@ -14,6 +14,7 @@ function recipeDetailsShow(id) {
     .then(data => {
       console.log(data);
 
+      
       theData = data;
 
       //כותרת המתכון

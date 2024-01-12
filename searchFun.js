@@ -3,6 +3,7 @@ searchButton.addEventListener('click', searchFun);
 
 const searchResults = document.getElementById("searchResults"); //אזור שמאל
 const elementsDiv = document.getElementById("elementsDiv");//אזור אמצע
+
 const theInput = document.getElementById("theInput");
 
 //פונקציה לביצוע חיפוש המתכונים

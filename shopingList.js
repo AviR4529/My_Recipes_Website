@@ -1,4 +1,5 @@
 const shoping_list_div = document.getElementById("shoping_list_div");
+
 let i = 0;
 
 //פונקציה להוספת רשימת קניות

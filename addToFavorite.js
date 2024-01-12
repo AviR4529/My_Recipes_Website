@@ -1,4 +1,4 @@
-var popupContent = document.getElementById('popup-content');
+var popupContent = document.getElementById('popup-content'); 
 
 //פונקציה לפתיחת החלון הקופץ
 function openPopup() {
