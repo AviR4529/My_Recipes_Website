@@ -1,5 +1,6 @@
 let theData;
 let currentServings = 0;
+let arrAmount = [];
 
 //פונקציה להצגת פרטי המתכון הנבחר
 function recipeDetailsShow(id) {
@@ -8,11 +9,11 @@ function recipeDetailsShow(id) {
   elementsDiv.innerHTML = "";
 
   //קבלת פרטי המתכון מהשרת
-  fetch("https://api.spoonacular.com/recipes/" + id + "/information?apiKey=419fb3df3c5f4d138b3e6f45a313845a")
+  fetch("https://api.spoonacular.com/recipes/" + id + "/information?apiKey=c334e8eb6e784f90ab845d38fd6a014a")
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      
+
       theData = data;
 
       //כותרת המתכון
@@ -25,6 +26,31 @@ function recipeDetailsShow(id) {
       mainImage.src = data.image;
       mainImage.id = "bigImage";
       elementsDiv.appendChild(mainImage);
+
+      //הוספת כפתור לב למועדפים
+      const heartButton = document.createElement("p");
+      heartButton.id = "heartButtonID";
+      heartButton.innerHTML = "&#128151;";
+      elementsDiv.appendChild(heartButton);
+
+      //פונקציה שתפעל הזמן לחיצה על כפתור הלב
+      heartButton.onclick = function () {
+        var storedArrayString = localStorage.getItem("arrFavoriteID");
+
+        if (storedArrayString === null) {
+          arrFavoriteID = [];
+        } else {
+          arrFavoriteID = JSON.parse(storedArrayString);
+        }
+
+        arrFavoriteID.push(data);
+        console.log(arrFavoriteID);
+
+        var arrayString = JSON.stringify(arrFavoriteID);
+        localStorage.setItem("arrFavoriteID", arrayString);
+
+        add_to_favorite(data);
+      };
 
       //זמן הכנה
       const preparationTime = document.createElement("p");
@@ -69,20 +95,20 @@ function recipeDetailsShow(id) {
       //יצירת דיב עבור הרכיבים
       const divOfIngredients = document.createElement("div");
       divOfIngredients.id = "divOfIngredientsID";
+
+      //יצירת הטקסט של הרכיבים
       const Ingredients = document.createElement("p");
       Ingredients.id = "IngredientsID";
       Ingredients.innerHTML = "<b> Ingredients: </b> <br>";
 
-      //הדפסה של הרכיבים
+      //הדפסה של הרכיבים בלואלה
       data.extendedIngredients.forEach(result => {
-
         Ingredients.innerHTML += result.amount + " " + result.unit + " " + result.originalName + "<br>";
       })
       divOfIngredients.appendChild(Ingredients);
       elementsDiv.appendChild(divOfIngredients);
 
-
-      //פונקציה להוספת הטקסט של סועדים
+      //פונקציה להוספת כמות הסועדים בלחיצה על הכפתור
       function plusServingsFun(servings) {
         servings += 1;
         updateIngredients(servings);
@@ -101,11 +127,13 @@ function recipeDetailsShow(id) {
         return servings;
       }
 
+
       //פונקציה לעדכון כמות הרכיבים בהתאם לסועדים
       function updateIngredients(servings) {
         const ingredientsEl = document.getElementById("IngredientsID");
         ingredientsEl.innerHTML = "Ingredients: <br>";
 
+        arrAmount = [];
         //הדפסה מחדש של הרכיבים המעודכנים
         theData.extendedIngredients.forEach(result => {
           const newAmount = (result.amount / data.servings) * servings;
@@ -114,23 +142,43 @@ function recipeDetailsShow(id) {
           else {
             ingredientsEl.innerHTML += newAmount.toFixed(3) + " " + result.unit + " " + result.originalName + "<br>";
           }
-          result.amount = newAmount;
+          arrAmount.push(newAmount);
         });
       }
+
+
       // בקשה לשרת עבור רמת הטעם של המתכון
-      fetch("https://api.spoonacular.com/recipes/" + id + "/tasteWidget.json?apiKey=419fb3df3c5f4d138b3e6f45a313845a")
+      fetch("https://api.spoonacular.com/recipes/" + id + "/tasteWidget.json?apiKey=c334e8eb6e784f90ab845d38fd6a014a")
         .then(response => response.json())
         .then(data => {
           console.log(data);
 
-          //הדפסה של רמות הטעם של המתכון
-          let textOfTaste = document.createElement("p");
+
+          const textOfTaste = document.createElement("div");
           for (let key in data) {
+
+            let tasteText = "";
+
             if (data.hasOwnProperty(key)) {
-              let textNode = document.createTextNode(`${key}: ${data[key]} ${"😜"}`);
-              textOfTaste.appendChild(textNode);
-              let lineBreak = document.createElement("br");
-              textOfTaste.appendChild(lineBreak);
+              if (data[key] === 0) {
+                tasteText = `${key}: ${"none"}`;
+              }
+              else if (data[key] <= 25) {
+                tasteText = `${key}: ${" 🔥  "}`;
+              }
+              else if (data[key] <= 50) {
+                tasteText = `${key}: ${"🔥🔥 "}`;
+              }
+              else if (data[key] <= 75) {
+                tasteText = `${key}: ${" 🔥🔥🔥 "}`;
+              }
+              else if (data[key] <= 100) {
+                tasteText = `${key}: ${" 🔥🔥🔥🔥 "}`;
+              }
+
+              textOfTaste.innerHTML += tasteText + "<br>";
+
+
             }
           }
           elementsDiv.appendChild(textOfTaste);
@@ -149,7 +197,7 @@ function recipeDetailsShow(id) {
           alert("error: " + error);
         });
 
-      //כפתור הוספה לרשימת קניות
+      //יצירת כפתור עבור הוספה לרשימת קניות
       const add_to_shoping_list_button = document.createElement("button");
       add_to_shoping_list_button.id = "add_to_shoping_list_id";
       add_to_shoping_list_button.innerText = "Add to shoping list";
@@ -157,7 +205,7 @@ function recipeDetailsShow(id) {
 
       //פונקציה להוספת רשימת הקניות
       add_to_shoping_list_button.onclick = function () {
-        add_to_shoping_list_Fun(theData);
+        add_to_shoping_list_Fun(theData, arrAmount);
       };
 
       const lineBreak1 = document.createElement("br");
@@ -165,10 +213,23 @@ function recipeDetailsShow(id) {
 
       //רמת הבריאות של המתכון
       const healthScore = document.createElement("p");
-      healthScore.innerHTML = "health Score: " + data.healthScore;
+      if (data.healthScore == 0) {
+        healthScore.innerHTML = "health Score: 0";
+      }
+      else if (data.healthScore <= 25) {
+        healthScore.innerHTML = "health Score: 🔥";
+      }
+      else if (data.healthScore <= 50) {
+        healthScore.innerHTML = "health Score: 🔥🔥";
+      }
+      else if (data.healthScore <= 75) {
+        healthScore.innerHTML = "health Score: 🔥🔥🔥";
+      }
+      else if (data.healthScore <= 100) {
+        healthScore.innerHTML = "health Score: 🔥🔥🔥🔥";
+      }
+
       elementsDiv.appendChild(healthScore);
-
-
 
     })
     .catch(error => {

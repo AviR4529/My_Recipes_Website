@@ -10,32 +10,41 @@
 
 </head>
 
-<body>
-
+<body onload="add_to_favorite_OnLoad()">
     <div id="headerArea">
-      
-        <p id="titlePage"> &nbsp;-My recipe site- &#128540</p>
-   
+        <p id="titlePage">-My recipe site- &#128540</p>
         <div id="searchArea">
             <p id="serachText">Serach here:</p>
             <input id="theInput" placeholder="Search recipes!">
             <button id="searchButton">Search</button>
         </div>
+        <p id="heartFavorites" onmouseover="openPopup()"> &nbsp; &#128151; &nbsp;</p>
+        <div id="popup-content" class="hidden">
+        </div>
+
     </div>
 
     <div id="bodyWebsite">
         <div id="searchResults"></div>
         <div id="elementsDiv"></div>
-        <div id="shoping_list_div"><h2>My Shoping List</h2></div>
-    </div>
+        <div id="shoping_list_div">
+            <h2>My Shoping List</h2>
+            <button id="clearLocalStorageButton">Clear</button>
+            <script>
 
-   
+                function clearLocalStorage() {
+                    localStorage.clear();
+                    console.log("Local storage cleared!");
+                }
+
+                document.getElementById("clearLocalStorageButton").addEventListener("click", clearLocalStorage);
+            </script>
+        </div>
+    </div>
     <script src="searchFun.js"></script>
     <script src="recipeDetails.js"></script>
     <script src="shopingList.js"></script>
-  
-    
-    
-
+    <script src="addToFavorite.js"></script>
 </body>
+
 </html>

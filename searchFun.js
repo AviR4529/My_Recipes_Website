@@ -11,10 +11,11 @@ function searchFun() {
     //ניקוי הדיב האמצעי מתוצאות חיפוש ישנות
     elementsDiv.innerHTML = "";
 
+    //קבלת ערך החיפוש מהמשתמש והכנסתו למשתנה
     let querySearch = theInput.value;
 
     //בקשה לשרת עבור חיפוש המתכונים
-    fetch('https://api.spoonacular.com/recipes/complexSearch?apiKey=419fb3df3c5f4d138b3e6f45a313845a&query=' + querySearch)
+    fetch('https://api.spoonacular.com/recipes/complexSearch?apiKey=c334e8eb6e784f90ab845d38fd6a014a&query=' + querySearch)
         .then(response => response.json())
         .then(data => {
 
@@ -30,17 +31,17 @@ function searchFun() {
         <img id="images" src="${result.image}" alt="${result.title}" width="30" height="30">
         <p id="nameRecipe" onclick="recipeDetailsShow(${result.id})">${result.title}</p>
       `;
-
+          
+        
                 searchResults.appendChild(recipeDiv);
             });
 
             //טיפול במקרה קצה שבו אין תוצאות חיפוש
-            if (data.results.length == 0) {
+            if (data.results.length === 0) {
                 searchResults.innerHTML = "<h1>- No recipes found!</h1>";
             }
 
         })
-
         //טיפול במקרה של שגיאה
         .catch(error => {
             alert("error! the search not working! - " + error);
