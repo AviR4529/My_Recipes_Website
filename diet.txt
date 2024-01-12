@@ -1,3 +1,0 @@
- <link rel="icon" href=
-    "C:\Users\אברהם ריש\Desktop\HTML\פרויקט אמצע\diet.png"
-              type="image/x-icon">
