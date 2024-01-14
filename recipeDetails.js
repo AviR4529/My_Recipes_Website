@@ -5,16 +5,21 @@ let arrAmount = [];
 //פונקציה להצגת פרטי המתכון הנבחר
 function recipeDetailsShow(id) {
 
+
+
   //ניקוי הדיב
   elementsDiv.innerHTML = "";
 
+
+  arrAmount = [];
+
   //קבלת פרטי המתכון מהשרת
-  fetch("https://api.spoonacular.com/recipes/" + id + "/information?apiKey=c334e8eb6e784f90ab845d38fd6a014a")
+  fetch("https://api.spoonacular.com/recipes/" + id + "/information?apiKey=419fb3df3c5f4d138b3e6f45a313845a")
     .then(response => response.json())
     .then(data => {
       console.log(data);
 
-      
+
       theData = data;
 
       //כותרת המתכון
@@ -34,21 +39,23 @@ function recipeDetailsShow(id) {
       heartButton.innerHTML = "&#128151;";
       elementsDiv.appendChild(heartButton);
 
-      //פונקציה שתפעל הזמן לחיצה על כפתור הלב
+      //פונקציה שתפעל בלחיצה על כפתור הלב
       heartButton.onclick = function () {
-        var storedArrayString = localStorage.getItem("arrFavoriteID");
 
+        //קבלת מערך המועדפים מהאחסון המקומי
+        var storedArrayString = localStorage.getItem("arrOfFavorites");
         if (storedArrayString === null) {
-          arrFavoriteID = [];
+          arrOfFavorites = [];
         } else {
-          arrFavoriteID = JSON.parse(storedArrayString);
+          arrOfFavorites = JSON.parse(storedArrayString);
         }
 
-        arrFavoriteID.push(data);
-        console.log(arrFavoriteID);
+        arrOfFavorites.push(data);
+        console.log(arrOfFavorites);
 
-        var arrayString = JSON.stringify(arrFavoriteID);
-        localStorage.setItem("arrFavoriteID", arrayString);
+        //הכנסת המערך לאחסון המקומי
+        var arrayString = JSON.stringify(arrOfFavorites);
+        localStorage.setItem("arrOfFavorites", arrayString);
 
         add_to_favorite(data);
       };
@@ -84,13 +91,21 @@ function recipeDetailsShow(id) {
 
       //האזנה לאירוע לחיצה של כפתור הוספת סועדים
       plusServingsButton.addEventListener("click", function () {
-        currentServings = plusServingsFun(currentServings);
-        servings.innerHTML = "servings: " + currentServings;
+        currentServings = currentServings += 1;
+        updateIngredients(currentServings);
+        servings.innerHTML = "Servings: " + currentServings;
       });
+
       //האזנה לאירוע לחיצה של כפתור הפחתת סועדים
       minusServingsButton.addEventListener("click", function () {
-        currentServings = minusServingsFun(currentServings);
-        servings.innerHTML = "servings: " + currentServings;
+        if (currentServings > 1) {
+          currentServings -= 1;
+          updateIngredients(currentServings);
+        }
+        else {
+          alert("At least one diner is required for the recipe!");
+        }
+        servings.innerHTML = "Servings: " + currentServings;
       });
 
       //יצירת דיב עבור הרכיבים
@@ -102,85 +117,60 @@ function recipeDetailsShow(id) {
       Ingredients.id = "IngredientsID";
       Ingredients.innerHTML = "<b> Ingredients: </b> <br>";
 
-      //הדפסה של הרכיבים בלואלה
+      //הדפסה של הרכיבים בלולאה
       data.extendedIngredients.forEach(result => {
         Ingredients.innerHTML += result.amount + " " + result.unit + " " + result.originalName + "<br>";
       })
       divOfIngredients.appendChild(Ingredients);
       elementsDiv.appendChild(divOfIngredients);
 
-      //פונקציה להוספת כמות הסועדים בלחיצה על הכפתור
-      function plusServingsFun(servings) {
-        servings += 1;
-        updateIngredients(servings);
-        return servings;
-      }
-
-      //פונקציה להפחתת הטקסט של סועדים
-      function minusServingsFun(servings) {
-        if (servings > 1) {
-          servings -= 1;
-          updateIngredients(servings);
-        }
-        else {
-          alert("At least one diner is required for the recipe");
-        }
-        return servings;
-      }
-
-
       //פונקציה לעדכון כמות הרכיבים בהתאם לסועדים
-      function updateIngredients(servings) {
-        const ingredientsEl = document.getElementById("IngredientsID");
-        ingredientsEl.innerHTML = "Ingredients: <br>";
+      function updateIngredients(currentServings) {
+
+        Ingredients.innerHTML = "<b> Ingredients: </b> <br>";
 
         arrAmount = [];
+
         //הדפסה מחדש של הרכיבים המעודכנים
         theData.extendedIngredients.forEach(result => {
-          const newAmount = (result.amount / data.servings) * servings;
+          const newAmount = (result.amount / data.servings) * currentServings;
           if (Number.isInteger(newAmount))
-            ingredientsEl.innerHTML += newAmount + " " + result.unit + " " + result.originalName + "<br>";
+            Ingredients.innerHTML += newAmount + " " + result.unit + " " + result.originalName + "<br>";
           else {
-            ingredientsEl.innerHTML += newAmount.toFixed(3) + " " + result.unit + " " + result.originalName + "<br>";
+            Ingredients.innerHTML += newAmount.toFixed(2) + " " + result.unit + " " + result.originalName + "<br>";
           }
           arrAmount.push(newAmount);
         });
       }
 
-
       // בקשה לשרת עבור רמת הטעם של המתכון
-      fetch("https://api.spoonacular.com/recipes/" + id + "/tasteWidget.json?apiKey=c334e8eb6e784f90ab845d38fd6a014a")
+      fetch("https://api.spoonacular.com/recipes/" + id + "/tasteWidget.json?apiKey=419fb3df3c5f4d138b3e6f45a313845a")
         .then(response => response.json())
         .then(data => {
           console.log(data);
-
 
           const textOfTaste = document.createElement("div");
           for (let key in data) {
 
             let tasteText = "";
-
-            if (data.hasOwnProperty(key)) {
-              if (data[key] === 0) {
-                tasteText = `${key}: ${"none"}`;
-              }
-              else if (data[key] <= 25) {
-                tasteText = `${key}: ${" 🔥  "}`;
-              }
-              else if (data[key] <= 50) {
-                tasteText = `${key}: ${"🔥🔥 "}`;
-              }
-              else if (data[key] <= 75) {
-                tasteText = `${key}: ${" 🔥🔥🔥 "}`;
-              }
-              else if (data[key] <= 100) {
-                tasteText = `${key}: ${" 🔥🔥🔥🔥 "}`;
-              }
-
-              textOfTaste.innerHTML += tasteText + "<br>";
-
-
+            if (data[key] === 0) {
+              tasteText = `${key}: ${"none"}`;
             }
+            else if (data[key] <= 25) {
+              tasteText = `${key}: ${" 🔥 "}`;
+            }
+            else if (data[key] <= 50) {
+              tasteText = `${key}: ${" 🔥🔥 "}`;
+            }
+            else if (data[key] <= 75) {
+              tasteText = `${key}: ${" 🔥🔥🔥 "}`;
+            }
+            else if (data[key] <= 100) {
+              tasteText = `${key}: ${" 🔥🔥🔥🔥 "}`;
+            }
+
+            textOfTaste.innerHTML += tasteText + "<br>";
+
           }
           elementsDiv.appendChild(textOfTaste);
 
@@ -190,7 +180,7 @@ function recipeDetailsShow(id) {
           elementsDiv.appendChild(InstructionsButton);
           InstructionsButton.id = "InstructionsButtonID";
           InstructionsButton.addEventListener("click", function () {
-            const instructionsWindow = window.open(theData.spoonacularSourceUrl, "_blank");
+            window.open(theData.spoonacularSourceUrl, "_blank");
           });
 
         })
@@ -204,13 +194,11 @@ function recipeDetailsShow(id) {
       add_to_shoping_list_button.innerText = "Add to shoping list";
       elementsDiv.appendChild(add_to_shoping_list_button);
 
-      //פונקציה להוספת רשימת הקניות
-      add_to_shoping_list_button.onclick = function () {
+       
+      // פונקציה להוספת רשימת הקניות
+      add_to_shoping_list_button.addEventListener("click", function() {
         add_to_shoping_list_Fun(theData, arrAmount);
-      };
-
-      const lineBreak1 = document.createElement("br");
-      elementsDiv.appendChild(lineBreak1);
+      });
 
       //רמת הבריאות של המתכון
       const healthScore = document.createElement("p");

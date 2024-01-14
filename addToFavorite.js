@@ -1,4 +1,4 @@
-var popupContent = document.getElementById('popup-content'); 
+var popupContent = document.getElementById('popup-content');
 
 //פונקציה לפתיחת החלון הקופץ
 function openPopup() {
@@ -35,20 +35,20 @@ function add_to_favorite(data) {
 //הכנסת המתכונים למועדפים בטעינת העמוד
 function add_to_favorite_OnLoad() {
 
-    var storedArrayString = localStorage.getItem("arrFavoriteID");
+    var storedArrayString = localStorage.getItem("arrOfFavorites");
 
     //הגדרת המערך למועדפים בטעינה הראשונה של העמוד
     if (storedArrayString === null) {
-        var arrFavoriteID = [];
-        console.log(arrFavoriteID);
+        var arrOfFavorites = [];
+        console.log(arrOfFavorites);
     }
     else {
-        arrFavoriteID = JSON.parse(storedArrayString);
-        console.log(arrFavoriteID);
+        arrOfFavorites = JSON.parse(storedArrayString);
+        console.log(arrOfFavorites);
     }
 
     //הדפסת המועדפים בחלון הקופץ מתוך המערך השמור
-    arrFavoriteID.forEach(result => {
+    arrOfFavorites.forEach(result => {
         const divOfPopupFavorite = document.createElement("div");
         divOfPopupFavorite.id = "divOfPopupFavoriteID";
         const imgOfPopupFavorite = document.createElement("img");
@@ -63,7 +63,7 @@ function add_to_favorite_OnLoad() {
         //פתיחת המתכון לאחר לחיצה עליו בחלון הקופץ
         divOfPopupFavorite.onclick = function () {
 
-            recipeDetailsShow(data.id);
+            recipeDetailsShow(result.id);
         };
 
     });

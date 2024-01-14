@@ -16,7 +16,7 @@ function searchFun() {
     let querySearch = theInput.value;
 
     //בקשה לשרת עבור חיפוש המתכונים
-    fetch('https://api.spoonacular.com/recipes/complexSearch?apiKey=c334e8eb6e784f90ab845d38fd6a014a&query=' + querySearch)
+    fetch('https://api.spoonacular.com/recipes/complexSearch?apiKey=419fb3df3c5f4d138b3e6f45a313845a&query=' + querySearch)
         .then(response => response.json())
         .then(data => {
 
