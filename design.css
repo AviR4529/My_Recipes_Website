@@ -56,7 +56,6 @@ body {
     background-color: #f2e9e965;
     display: flex;
     border: 1px solid rgb(13, 114, 0);
-
 }
 
 #recipeDiv:hover {
@@ -67,23 +66,21 @@ body {
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    
+    text-overflow: ellipsis; 
 }
 
-#images {
+#images{
     padding: 7.5px 5px;
     border-radius: 50%;
 }
 
-#elementsDiv {
+#elementsDiv{
     width: 40%;
     background-color: rgb(255, 255, 255);
     text-align: center;
     justify-content: center;
     height: 75vh;
     overflow-y: auto;
-
 }
 
 #bigImage {
@@ -102,7 +99,6 @@ body {
 
 #IngredientsID {
     font-size: small;
-
 }
 
 #preparationTimeID {
@@ -112,7 +108,6 @@ body {
 
 #divOfIngredientsID {
     border: 1.5px solid darkorange;
-
 }
 
 #divOfServingsID {
@@ -126,34 +121,29 @@ body {
     margin-left: 4px;
     border-radius: 50%;
     cursor: pointer;
-
 }
 
 #minusServingsButtonID {
     cursor: pointer;
     border-radius: 50%;
     margin-right: 4px;
-
 }
 
 #quantity {
     padding: 5.5px 15px;
     height: 10px;
     width: 40px;
-
 }
 
 #textList {
     white-space: nowrap;
     margin: 1px 10px;
-
 }
 
 #shoping_list_Ingredients_div_id {
     display: flex;
     padding-top: 3px;
     margin-left: 2px;
-
 }
 
 #InstructionsButtonID {
@@ -172,7 +162,6 @@ body {
 }
 
 #heartButtonID {
-
     margin: 10px 10px;
     cursor: pointer;
     font-size: 25px;
@@ -186,15 +175,12 @@ body {
     display: none;
 }
 
-
 #popup-content {
     text-align: center;
     position: absolute;
     right:1%;
     top: 95px;
-    /* background-color: #baca5ef6; */
     padding: 8px;
-    /* border: 1px solid #0e007b; */
     border-radius: 10px;
 }
 
