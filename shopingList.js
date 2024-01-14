@@ -11,7 +11,7 @@ function add_to_shoping_list_Fun(data, arrAmount) {
     });
   }
 
-  shoping_list_div.innerHTML = "<h2>My Shoping List</h2>";
+  shoping_list_div.innerHTML = "<h2>My Shopping List</h2>";
 
   //יצירת האלמנטים על ידי ריצה על המערך
   data.extendedIngredients.forEach(result => {

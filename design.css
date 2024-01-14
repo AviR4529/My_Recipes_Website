@@ -52,7 +52,7 @@ body {
     width: 30%;
 }
 
-#recipeDiv {
+#recipeDiv{
     background-color: #f2e9e965;
     display: flex;
     border: 1px solid rgb(13, 114, 0);
@@ -60,7 +60,7 @@ body {
 
 #recipeDiv:hover {
     background-color: #509c59;  
-  }
+}
 
 #nameRecipe {
     cursor: pointer;
@@ -70,15 +70,14 @@ body {
 }
 
 #images{
-    padding: 7.5px 5px;
+    padding: 11px 5px;
     border-radius: 50%;
 }
 
 #elementsDiv{
     width: 40%;
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(243, 234, 234, 0.851);
     text-align: center;
-    justify-content: center;
     height: 75vh;
     overflow-y: auto;
 }
@@ -93,16 +92,10 @@ body {
     width: 30%;
     height: 75vh;
     text-align: center;
-    justify-content: center;
     overflow-y: auto;
 }
 
-#IngredientsID {
-    font-size: small;
-}
-
 #preparationTimeID {
-
     font-weight: bold;
 }
 
@@ -114,7 +107,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
 }
 
 #plusServingsButtonID {
@@ -146,13 +138,7 @@ body {
     margin-left: 2px;
 }
 
-#InstructionsButtonID {
-    text-align: center;
-    justify-content: center;
-}
-
 #heartFavorites{
-    display: inline-block;
     cursor: pointer;
     font-size: 35px;
 }
@@ -162,7 +148,6 @@ body {
 }
 
 #heartButtonID {
-    margin: 10px 10px;
     cursor: pointer;
     font-size: 25px;
 }
@@ -178,7 +163,7 @@ body {
 #popup-content {
     text-align: center;
     position: absolute;
-    right:1%;
+    right: 1%;
     top: 95px;
     padding: 8px;
     border-radius: 10px;
